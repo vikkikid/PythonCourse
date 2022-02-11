@@ -6,7 +6,7 @@ def gen_table(S):
     os.makedirs(path, exist_ok=True)
     
     begin = '\\documentclass{article}\n\\begin{document}\n\\begin{table}[h!]\n\\begin{center}\n\\begin{tabular}\n'
-    lines = '{ |' + ' a |' * len(S[0]) + ' }' + '\n\hline \n'
+    lines = '{ |' + ' c |' * len(S[0]) + ' }' + '\n\hline \n'
     gen = ' \\\ \n\\hline\n'.join(map(lambda s: ' & '.join(s), S)) + '\\\ \n\hline'
     end = '\n\\end{tabular}\n\\end{center}\n\\end{table}\n\\end{document}\n'
     

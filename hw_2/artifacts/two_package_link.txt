@@ -1,0 +1,1 @@
+https://test.pypi.org/project/hse-hw-moad-vik-f/0.0.1/
