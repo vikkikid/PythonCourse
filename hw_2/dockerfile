@@ -1,0 +1,49 @@
+FROM python:latest
+FROM debian:latest
+LABEL Maintainer="vikkikid"
+
+# graphviz info: https://pypi.org/project/graphviz/ 
+
+# Conda (source: https://hub.docker.com/r/conda/miniconda3/dockerfile)
+RUN apt-get -qq update && apt-get -qq -y install curl bzip2 \
+    && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
+    && bash /tmp/miniconda.sh -bfp /usr/local \
+    && rm -rf /tmp/miniconda.sh \
+    && conda install -y python=3 \
+    && conda update conda \
+    && apt-get -qq -y remove curl bzip2 \
+    && apt-get -qq -y autoremove \
+    && apt-get autoclean \
+    && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log \
+    && conda clean --all --yes \
+    && conda install graphviz
+    
+# Latex (source: https://github.com/theredfish/docker-pdflatex)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends texlive-latex-recommended texlive-fonts-recommended && \
+    apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-extra texlive-lang-all && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH /opt/conda/bin:$PATH
+
+WORKDIR /PythonCourse/hw_2
+
+VOLUME ["/PythonCourse/hw_2"]
+
+ADD . /PythonCourse/hw_2
+
+RUN pip install -i https://test.pypi.org/simple/ hse-hw-moad-vik-f==0.0.1 && \
+    pip install pydot-ng && \
+    pip install pdflatex && \
+    pip install astunparse && \
+    pip install pydot && \
+    pip install networkx && \
+    pip install matplotlib 
+    
+# RUN echo "PWD is: $PWD"
+
+# Run python script to generate pdf
+
+CMD ["cd ./artifacts"]
+CMD ["python", "two.py"]
+
