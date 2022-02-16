@@ -17,7 +17,7 @@ def gen_pic(img_file, S=None, with_table=False):
     
     if with_table is True and S is not None:
         pic += '\n\\begin{tabular}\n{ |' + ' c |' * len(S[0]) + ' }' + '\n\hline \n'
-        pic += ' \\\ \n\\hline\n'.join(map(lambda s: ' & '.join(s), S)) + '\\\ \n\hline\n\\end{tabular}'
+        pic += ' \\\ \n\\hline\n'.join(map(lambda s: ' & '.join(str(s)), S)) + '\\\ \n\hline\n\\end{tabular}'
 
     end = '\n\\end{center}\n\\end{document}\n'
     
@@ -40,6 +40,8 @@ if __name__ == '__main__':
         ['Can', 'you', 'feel', 'me'],
         ['-', 'star', '-', 'wars'],
         ['(German)', 'Donaudampschif', 'fahrtkapitänswitwen', 'undwaisenversicherungsgesellschaft']]
+    
+    S = [[str(j) for j in i] for i in S] # all elements -> strings
         
     gen_pic('ast_fib.png', S, with_table=True)
     pdfl = PDFLaTeX.from_texfile(f'{folder}/two.tex')

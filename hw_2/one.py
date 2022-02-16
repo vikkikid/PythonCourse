@@ -25,7 +25,9 @@ if __name__ == '__main__':
         ['Can', 'you', 'feel', 'me'],
         ['-', 'star', '-', 'wars'],
         ['(German)', 'Donaudampschif', 'fahrtkapitänswitwen', 'undwaisenversicherungsgesellschaft']]
-        
+    
+    S = [[str(j) for j in i] for i in S] # all elements -> strings
+    
     if all(len(i) == len(S[0]) for i in S) is True:
         gen_table(S)
     else:
