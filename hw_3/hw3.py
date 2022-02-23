@@ -103,8 +103,30 @@ class MatrixTwo(np.lib.mixins.NDArrayOperatorsMixin, MixinShow, MixinVal, MixinS
         
         else:
             return type(self)(result)
+        
+
+class MixinHashing:
+    def __hash__(self):
+        return sum([sum(r) for r in self.x])
 
 
+class MatrixThree(MatrixOne, MixinHashing):
+    '''
+    task 3
+    '''
+    _matmul_hashes = {}
+
+    def __matmul__(self, other):
+        key = (self.__hash__(), other.__hash__())
+        
+        if key in self._matmul_hashes:
+            return self._matmul_hashes[key]
+        
+        matmul = MatrixThree(super().__matmul__(other).x)
+        self._matmul_hashes[key] = matmul
+        return matmul
+
+    
 
 if __name__ == '__main__':
     path = 'artifacts'
@@ -113,7 +135,7 @@ if __name__ == '__main__':
     hard = path + '/hard'
     os.makedirs(easy, exist_ok=True)
     os.makedirs(medi, exist_ok=True)
-    # os.makedirs(hard, exist_ok=True) # no hard this time =(
+    os.makedirs(hard, exist_ok=True) 
     
     np.random.seed(0)
     # easy part
@@ -130,3 +152,16 @@ if __name__ == '__main__':
     save((m12 + m22).__str__(), f"{medi}/matrix+.txt")
     save((m12 * m22).__str__(), f"{medi}/matrix*.txt")
     save((m12 @ m22).__str__(), f"{medi}/matrix@.txt")
+
+    # hard part
+    B = MatrixThree([[1, 3], [5, 4]])
+    D = MatrixThree([[1, 3], [5, 4]])
+    A = MatrixThree([[9, 2], [7, 3]])
+    C = MatrixThree([[7, 5], [6, 8]])
+    all_operations = [A, B, C, D, A @ B, C @ D]
+    all_files = ["A.txt", "B.txt", "C.txt", "D.txt", "AB.txt", "CD.txt"]
+    for m, n in zip(all_operations, all_files):
+        save(m, f"{hard}/{n}")
+        
+    save(f"{hash(A @ B)}, {hash(C @ D)}", f"{hard}/hash.txt")   
+    
