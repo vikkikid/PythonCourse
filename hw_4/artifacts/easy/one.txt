@@ -1,0 +1,3 @@
+sync time is 4.635725975036621
+process time is 1.9816069602966309
+threads time is 5.602867841720581
